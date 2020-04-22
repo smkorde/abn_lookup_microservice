@@ -19,12 +19,21 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 
+<distributionManagement>
+    <repository>
+      <id>jfrog</id>
+      <name>Artifactory Repository</name>
+      <url>http://172.31.83.86:8081/artifactory/abn_lookup_build</url>
+    </repository>
+  </distributionManagement>
+  
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
