@@ -3,7 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.sud.digbiz</groupId>
 	<artifactId>abn-lookup</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -31,6 +30,7 @@
       <id>jfrog</id>
       <name>Artifactory Repository</name>
       <url>http://172.31.83.86:8081/artifactory/abn_lookup_build</url>
+	  <uniqueVersion>false</uniqueVersion>
     </repository>
   </distributionManagement>
   
