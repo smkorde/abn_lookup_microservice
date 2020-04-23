@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sud.digbiz</groupId>
 	<artifactId>abn-lookup</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+        <version>1.0-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>abn-lookup</name>
@@ -27,11 +27,11 @@
 
 <distributionManagement>
     <repository>
+     <uniqueVersion>false</uniqueVersion>
       <id>jfrog</id>
       <name>Artifactory Repository</name>
       <url>http://172.31.83.86:8081/artifactory/abn_lookup_build</url>
-	  <uniqueVersion>false</uniqueVersion>
-    </repository>
+     </repository>
   </distributionManagement>
   
 	<dependencies>
