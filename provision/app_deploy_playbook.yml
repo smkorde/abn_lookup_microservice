@@ -1,37 +1,10 @@
----
-- name: Install Roles from Galaxy
-  hosts: localhost
-  connection: local
-  become_user: "{{ local_user | default('awx') }}"
-  become: yes
-  tasks:
-    - name: installing ansible-galaxy roles
-      command: ansible-galaxy install -r requirements.yml --roles-path roles
-
-- name: Install Java
+- name: setup spring boot
   hosts: app_server
-  become: yes
-  become_user: root
+  vars:
+    springboot_application_name: abn-lookup
+    springboot_src_url: "http://ec2-54-89-138-55.compute-1.amazonaws.com:8081/artifactory/abn_lookup_build/com/sud/digbiz/abn-lookup/1.0-RELEASE/abn-lookup-1.0-RELEASE.jar"
+    springboot_deploy_folder: /home/ec2-user
+    springboot_user: root
+    springboot_group: root
   roles:
-    - geerlingguy.java
-
-- name: Download Application from Repo
-  hosts: app_server
-  tasks:
-    - get_url:
-        force: yes
-        url: "{{ ARTIFACT_URL }}"
-        dest: "/tmp/{{ APP_NAME }}.war"
-    - stat: 
-        path: "/tmp/{{ APP_NAME }}.war"
-
-- name: Setup Spring Boot
-  hosts: app_server
-  become: yes
-  become_user: root
-  roles: 
-    - { role: pellepelster.springboot-role,
-        spring_boot_file: "{{ APP_NAME }}.war",
-        spring_boot_file_source: "/tmp/{{ APP_NAME }}.war",
-        spring_boot_application_id: "{{ APP_NAME }}"
-    } 
+    - role: ansible-springboot-role
