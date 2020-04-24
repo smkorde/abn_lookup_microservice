@@ -1,0 +1,5 @@
+---
+# vars file for ansible-springboot-role
+sysd_user_services_folder: /usr/lib/systemd/system
+sysd_script: "{{ sysd_user_services_folder }}/{{ springboot_application_name }}.service"
+ARTIFACT_URL: http://ec2-54-89-138-55.compute-1.amazonaws.com:8081/artifactory/abn_lookup_build/com/sud/digbiz/abn-lookup/1.0-RELEASE/abn-lookup-1.0-RELEASE.jar
