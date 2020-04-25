@@ -1,8 +1,8 @@
 - name: setup spring boot
   hosts: app_server
   vars:
-    springboot_application_name: abn-lookup
-    springboot_src_url: "http://ec2-54-89-138-55.compute-1.amazonaws.com:8081/artifactory/abn_lookup_build/com/sud/digbiz/abn-lookup/1.0-RELEASE/abn-lookup-1.0-RELEASE.jar"
+    springboot_application_name: "{{ lookup('env','APP_NAME') }}"
+    springboot_src_url: "{{ lookup('env','ARTIFACT_URL') }}"
     springboot_deploy_folder: /home/ec2-user
     springboot_user: root
     springboot_group: root
