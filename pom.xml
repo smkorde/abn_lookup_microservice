@@ -30,7 +30,7 @@
      <uniqueVersion>false</uniqueVersion>
       <id>jfrog</id>
       <name>Artifactory Repository</name>
-      <url>http://172.31.83.86:8081/artifactory/abn_lookup_build</url>
+      <url>http://172.31.47.10:8081/artifactory/abn_lookup_build</url>
      </repository>
   </distributionManagement>
   
@@ -76,6 +76,19 @@
 				<executable>true</executable>
 				</configuration>
 			</plugin>
+			<plugin>
+<groupId>org.sonarsource.scanner.maven</groupId>
+<artifactId>sonar-maven-plugin</artifactId>
+<version>3.3.0.603</version>
+<executions>
+<execution>
+<phase>verify</phase>
+<goals>
+<goal>sonar</goal>
+</goals>
+</execution>
+</executions>
+</plugin>
 		</plugins>
 	</build>
 
