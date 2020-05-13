@@ -7,18 +7,14 @@
 	<artifactId>abn-lookup</artifactId>
         <version>1.0-RELEASE</version>
 	<packaging>jar</packaging>
-
 	<name>abn-lookup</name>
 	<description>Project for Spring Boot</description>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -33,7 +29,6 @@
       <url>http://172.31.47.10:8081/artifactory/abn_lookup_build</url>
      </repository>
   </distributionManagement>
-  
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
