@@ -2,56 +2,54 @@ final FULL_BUILD = true
 final HOST_PROVISION = "app.local"
 final JFROG_HOST = "172.31.47.10:8081"
 node {
-    stage('git checkout') {
+    stage('Github Pull'){
            // Get some code from a GitHub repository
             git 'https://github.com/smkorde/abn_lookup_microservice.git'
             }
       
-    stage('Build'){
+    stage('Package App'){
             // Run Maven on a Unix agent.
-            sh "mvn clean package"
+            sh "mvn -Dmaven.test.skip=true clean package"
             }
-    stage('Quality Check'){
-        //sh 'mvn -X'
-            sh 'mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=smkorde_abn_lookup_microservice -Dsonar.organization=smkorde -Dsonar.login=42497bfdcc7c491854870224bb59b275dbf565b1 -DdeployOnly=false'
-              }
+            
+    stage('Unit Tests'){
+            // Run Maven on a Unix agent.
+            sh "mvn test -Put"
+            }
+            
+    stage('Static Analysis'){
+            sh 'mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=smkorde_abn_lookup_microservice -Dsonar.organization=smkorde -Dsonar.login=42497bfdcc7c491854870224bb59b275dbf565b1 -DdeployOnly=false -DskipTests'
+            }
 
-    stage('Upload To Artifactory'){
-            // Run Maven on a Unix agent.
-            sh "mvn deploy -DdeployOnly=true"
+    stage('Artifact Upload'){
+            sh "mvn deploy -DdeployOnly=true -Dmaven.test.skip=true"
             }
-    stage('Deploy') {
-       def pom = readMavenPom file: "pom.xml"
-        def repoPath =  "${pom.groupId}".replace(".", "/") + 
-                        "/${pom.artifactId}"
-        def version = pom.version
-        def APP_NAME = "ABN LOOKUP"
+            
+    stage('Provision and Deploy') {
+     def pom = readMavenPom file: "pom.xml"
+     def repoPath =  "${pom.groupId}".replace(".", "/") + "/${pom.artifactId}"
+     def version = pom.version
+     def APP_NAME = "ABN LOOKUP"
         
-    if(!FULL_BUILD) { //takes the last version from repo
+     if(!FULL_BUILD) { //takes the last version from repo
             sh "curl -o metadata.xml -s http://${JFROG_HOST}/artifactory/abn_lookup_build/${repoPath}/maven-metadata.xml"
-            version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
-                         returnStdout: true
+            version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"', returnStdout: true
         }
-    def artifactUrl = "http://${JFROG_HOST}/artifactory/abn_lookup_build/${repoPath}/${version}/${pom.artifactId}-${version}.jar"
+     def artifactUrl = "http://${JFROG_HOST}/artifactory/abn_lookup_build/${repoPath}/${version}/${pom.artifactId}-${version}.jar"
 
-    withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
-            echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
-
-            // install galaxy roles
-            //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
-            //sh "ansible-playbook provision/app_deploy_playbook.yml -i provision/inventory.ini"        
-            ansiblePlaybook(
-                        credentialsId: 'ansible_ssh_private_key',
-                        limit: "${HOST_PROVISION}",
-                        playbook: './provision/app_deploy_playbook.yml',
-                        inventory: './provision/inventory.ini',
-                        disableHostKeyChecking: true,
-                       //become: true,
-                        becomeUser: 'root',
-                        
-                      colorized: true)
-             
-        }
+     withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
+        
+        echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
+    
+      ansiblePlaybook(
+                     credentialsId: 'ansible_ssh_private_key',
+                     limit: "${HOST_PROVISION}",
+                     playbook: './provision/app_deploy_playbook.yml',
+                     inventory: './provision/inventory.ini',
+                     disableHostKeyChecking: true,
+                     becomeUser: 'root',
+                     colorized: true)
+     }
     }
 
     stage('Archive Artifact') {
