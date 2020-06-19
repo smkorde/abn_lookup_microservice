@@ -23,4 +23,5 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Quality Check
-      run: mvn org.sonarsource.scanner.maven:sonar
+      run: mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=smkorde_abn_lookup_microservice -Dsonar.organization=smkorde -Dsonar.login=42497bfdcc7c491854870224bb59b275dbf565b1 -DdeployOnly=false -DskipTests
+      
