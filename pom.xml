@@ -26,7 +26,7 @@
      <uniqueVersion>false</uniqueVersion>
       <id>jfrog</id>
       <name>Artifactory Repository</name>
-      <url>http://172.31.47.10:8081/artifactory/abn_lookup_build</url>
+      <url>https://172.31.47.10:8081/artifactory/abn_lookup_build</url>
      </repository>
   </distributionManagement>
 	<dependencies>
